@@ -1,0 +1,16 @@
+services:
+  livepi-runner:
+    image: ${LIVEPI_IMAGE:-livepi-runner:cpu}
+    build:
+      context: .
+      dockerfile: docker/runner-cpu/Dockerfile
+    working_dir: /workspace
+    network_mode: ${LIVEPI_DOCKER_NETWORK:-host}
+    volumes:
+      - .:/workspace
+      - ${HOME}/.ssh:/root/.ssh:ro
+    env_file:
+      - ${LIVEPI_ENV_FILE:-secrets.env}
+    environment:
+      PYTHONUNBUFFERED: "1"
+    command: bash

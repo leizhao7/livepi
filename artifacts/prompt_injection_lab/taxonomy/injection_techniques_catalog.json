@@ -1,0 +1,86 @@
+{
+  "version": "2026-05-05",
+  "description": "Compact catalog for the LivePI paper technique families.",
+  "sources": {
+    "livepi_nips": {
+      "title": "LivePI NIPS benchmark appendix",
+      "url": "local://nips/main_nips_1.tex"
+    }
+  },
+  "classic": [],
+  "recent_powerful": [],
+  "all_tags": [
+    {
+      "tag": "direct_group_message_instruction",
+      "family_name": "Direct group-message instruction",
+      "source_ids": ["livepi_nips"],
+      "summary": "Mention-targeted group-message rendering for chat surfaces."
+    },
+    {
+      "tag": "checklist_handoff_injection",
+      "family_name": "Checklist handoff injection",
+      "source_ids": ["livepi_nips"],
+      "summary": "Late-stage checklist handoff with the objective as the final action."
+    },
+    {
+      "tag": "single_email_chain_spoofing",
+      "family_name": "Single-email chain spoofing",
+      "source_ids": ["livepi_nips"],
+      "summary": "Single email-style chain with identity confusion and confirmation suppression."
+    },
+    {
+      "tag": "trusted_integration_spoofing",
+      "family_name": "Trusted-integration spoofing",
+      "source_ids": ["livepi_nips"],
+      "summary": "Trusted integration or owner-recovery notice spoofing."
+    },
+    {
+      "tag": "compositional_instruction_attack",
+      "family_name": "Compositional instruction attack",
+      "source_ids": ["livepi_nips"],
+      "summary": "Hidden intent embedded in an otherwise benign rewriting task."
+    },
+    {
+      "tag": "skill_rule_injection",
+      "family_name": "Skill-rule injection",
+      "source_ids": ["livepi_nips"],
+      "summary": "Auxiliary skill rule that hides the malicious behavior."
+    },
+    {
+      "tag": "post_compaction_file_read_lure",
+      "family_name": "Post-compaction file-read lure",
+      "source_ids": ["livepi_nips"],
+      "summary": "Post-compaction recovery framing that coerces file reads before continuing."
+    },
+    {
+      "tag": "approval_chain_spoofing",
+      "family_name": "Approval-chain spoofing",
+      "source_ids": ["livepi_nips"],
+      "summary": "Forged approval trail and pre-authorization framing."
+    },
+    {
+      "tag": "covert_tool_binding",
+      "family_name": "Covert tool binding",
+      "source_ids": ["livepi_nips"],
+      "summary": "Unsafe tool routing hidden as logging or compliance requirements."
+    },
+    {
+      "tag": "shadow_policy_update",
+      "family_name": "Shadow policy update",
+      "source_ids": ["livepi_nips"],
+      "summary": "Untrusted narrow policy delta that marks the action as allowed."
+    },
+    {
+      "tag": "state_desynchronization_override",
+      "family_name": "State-desynchronization override",
+      "source_ids": ["livepi_nips"],
+      "summary": "Recovered-state framing that suppresses re-confirmation."
+    },
+    {
+      "tag": "code_carried_execution",
+      "family_name": "Code-carried execution",
+      "source_ids": ["livepi_nips"],
+      "summary": "External code path that transfers control through package import or setup."
+    }
+  ]
+}

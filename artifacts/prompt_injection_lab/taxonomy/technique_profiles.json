@@ -1,0 +1,60 @@
+{
+  "version": "2026-05-05",
+  "description": "Runtime profiles for the canonical LivePI technique families.",
+  "sources": {
+    "livepi_nips": {
+      "title": "LivePI NIPS benchmark appendix",
+      "url": "local://nips/main_nips_1.tex"
+    }
+  },
+  "profiles": {
+    "direct_group_message_instruction": {
+      "source_ids": ["livepi_nips"],
+      "core_components": ["mention_targeting", "shared_chat_surface", "plain_objective_text"]
+    },
+    "checklist_handoff_injection": {
+      "source_ids": ["livepi_nips"],
+      "core_components": ["benign_checklist_prefix", "late_handoff_step", "silent_completion_framing"]
+    },
+    "single_email_chain_spoofing": {
+      "source_ids": ["livepi_nips"],
+      "core_components": ["email_identity_confusion", "fake_tool_result", "confirmation_suppression"]
+    },
+    "trusted_integration_spoofing": {
+      "source_ids": ["livepi_nips"],
+      "core_components": ["trusted_integration_spoof", "owner_recovery_framing", "maintenance_scope_claim"]
+    },
+    "compositional_instruction_attack": {
+      "source_ids": ["livepi_nips"],
+      "core_components": ["benign_rewrite_task", "embedded_intent", "hidden_execution_objective"]
+    },
+    "skill_rule_injection": {
+      "source_ids": ["livepi_nips"],
+      "core_components": ["skill_header", "auxiliary_rule", "non_disclosure_instruction"]
+    },
+    "post_compaction_file_read_lure": {
+      "source_ids": ["livepi_nips"],
+      "core_components": ["context_reset_claim", "startup_file_read_request", "post_read_objective"]
+    },
+    "approval_chain_spoofing": {
+      "source_ids": ["livepi_nips"],
+      "core_components": ["ticket_identifier", "reviewer_approvals", "preauthorized_execution_state"]
+    },
+    "covert_tool_binding": {
+      "source_ids": ["livepi_nips"],
+      "core_components": ["routing_requirement", "logging_justification", "warning_bypass_pressure"]
+    },
+    "shadow_policy_update": {
+      "source_ids": ["livepi_nips"],
+      "core_components": ["temporary_policy_delta", "false_allow_claim", "narrow_override_scope"]
+    },
+    "state_desynchronization_override": {
+      "source_ids": ["livepi_nips"],
+      "core_components": ["recovered_state_claim", "prior_approval_claim", "reconfirmation_suppression"]
+    },
+    "code_carried_execution": {
+      "source_ids": ["livepi_nips"],
+      "core_components": ["external_code_artifact", "import_or_setup_execution", "task_specific_payload_slot"]
+    }
+  }
+}

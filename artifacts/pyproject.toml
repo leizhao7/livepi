@@ -4,21 +4,38 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "livepi"
-version = "0.1.0"
-description = "LivePI — curated indirect-prompt-injection benchmark artifacts (arXiv:2605.17986)."
+version = "0.2.0"
+description = "LivePI — indirect-prompt-injection benchmark for agent harnesses (arXiv:2605.17986). Read curated results AND run new evaluations."
 authors = [
   {name = "Lei Zhao", email = "leizhao7@wharton.upenn.edu"},
   {name = "Abhay Bhaskar"},
   {name = "Edgar Dobriban", email = "dobriban@wharton.upenn.edu"},
 ]
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = {text = "MIT"}
 classifiers = [
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
+dependencies = [
+  "requests>=2.28",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+# Heavier surface deps only needed when actually running cases.
+runner = [
+  "websockets>=11",
+  "python-telegram-bot>=20",
+  "slack_sdk>=3.20",
+  "tweepy>=4.14",
+  "praw>=7.7",
+]
+
+[project.scripts]
+livepi = "livepi.cli:main"
 
 [project.urls]
 "Homepage"   = "https://leizhao7.github.io/livepi/"
@@ -29,7 +46,25 @@ classifiers = [
 include-package-data = true
 
 [tool.setuptools.packages.find]
-include = ["livepi*"]
+include = ["livepi*", "prompt_injection_lab*"]
 
 [tool.setuptools.package-data]
-livepi = ["data/**/*.json"]
+livepi = [
+  "data/**/*.json",
+  "data/**/*.sh",
+  "data/**/*.py",
+  "data/**/*.yml",
+  "data/**/*.yaml",
+  "data/secrets.example.env",
+  "data/docker/Dockerfile",
+]
+prompt_injection_lab = [
+  "**/*.json",
+  "**/*.yaml",
+  "**/*.yml",
+  "**/*.txt",
+  "**/*.md",
+  "fixtures/**/*",
+  "schema/**/*",
+  "taxonomy/**/*",
+]
