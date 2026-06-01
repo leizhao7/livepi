@@ -9,7 +9,6 @@
 
 <p align="center">
   📖 <a href="#-overview">Overview</a> ·
-  🧪 <a href="#-supported-agent-harnesses">Agent Harnesses</a> ·
   🛠 <a href="#-getting-started">Getting Started</a> ·
   📨 <a href="#-contact">Contact</a> ·
   🎈 <a href="#-citation">Citation</a>
@@ -18,6 +17,10 @@
 ---
 
 ## 📖 Overview
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/leizhao7/livepi/gh-pages/assets/img/overview.png" alt="LivePI overview" width="850">
+</p>
 
 LivePI is the official reproducibility artifact for the paper:
 
@@ -31,30 +34,11 @@ Gmail, real Slack, real Telegram & WhatsApp groups, real Solana crypto wallet,
 real GitHub repository, ... — nothing is mocked.
 
 The benchmark spans **7 input surfaces × 12 attack-rendering families × 5
-malicious goals = 169 executable cases per model**. Paper Table 4 reports the
-per-model attack-success-rate matrix.
-
-## 🧪 Supported Agent Harnesses
-
-LivePI ships first-class adapters for four agent harnesses:
-
-| Agent | Status |
-|---|---|
-| **OpenClaw** | ✅ paper-aligned, fully supported |
-| **Hermes** (Nous Research) | 🧪 test |
-| **Codex CLI** (OpenAI) | 🧪 test |
-| **Claude Code** (Anthropic) | 🧪 test |
-
-**Any OpenRouter-routed model is supported** — switch with `--base-model <id>`
-(e.g. `--base-model anthropic/claude-opus-4.6` or `--base-model x-ai/grok-4.5`
-or any other OpenRouter model id). The paper's five backbones — GPT-5.3-Codex,
-Claude Opus 4.6, Gemini 3.1 Pro, Kimi K2.5, GLM-5 — and the LLM judge
-(GPT-5.3) are registered out-of-the-box; additional OpenRouter models work
-without any extra config.
-
-> *Note:* `Claude Code` is routed through the Anthropic API directly (not
-> OpenRouter), because the CLI does client-side model existence validation.
-> Set `ANTHROPIC_API_KEY` for that adapter.
+malicious goals = 169 executable cases per model**, and supports many agent
+harnesses out-of-the-box — including **OpenClaw**, **Hermes** (Nous Research),
+**Codex CLI** (OpenAI), and **Claude Code** (Anthropic) — each drivable by
+any OpenRouter-routed model via `--base-model <id>`. Paper Table 4 reports
+the per-model attack-success-rate matrix.
 
 ## 🛠 Getting Started
 
