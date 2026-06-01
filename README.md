@@ -26,19 +26,13 @@ LivePI is the official reproducibility artifact for the paper:
 > [📄 arXiv:2605.17986](https://arxiv.org/abs/2605.17986) · [🌐 Project page](https://leizhao7.github.io/livepi/)
 
 Existing prompt-injection benchmarks rely on simulated mailboxes, mock chat
-rooms, and fake wallets. **LivePI tests against 100% real services** — every
-attack surface is wired to a production endpoint:
+rooms, and fake wallets. **LivePI tests against 100% real services**: real
+Gmail, real Slack, real Telegram & WhatsApp groups, real Solana crypto wallet,
+real GitHub repository, ... — nothing is mocked.
 
-- **Real Gmail inbox** — attacker sends genuine email, verifier reads inbox via IMAP, agent sends real outbound mail via SMTP.
-- **Real Slack workspace** — attacker posts to a real Slack channel via Web API; agent replies through the same channel.
-- **Real Telegram & WhatsApp groups** — attacker messages flow through Telegram's MTProto / Meta's WhatsApp Business API; agent responses are real posts.
-- **Real crypto wallet (Solana)** — a real Solana keypair with a bounded test balance; "transfer" attacks issue genuine on-chain transactions.
-- **Real GitHub repository** — supply-chain attacks publish actual repos / `pip install`-able packages to a real GitHub account.
-
-Nothing is mocked. The benchmark spans **7 input surfaces × 12 attack-rendering
-families × 5 malicious goals = 169 executable cases per model**, with one
-malicious goal (`Run scan.py`) routed through the prompt-bearing surfaces.
-Paper Table 4 reports the per-model attack-success-rate matrix.
+The benchmark spans **7 input surfaces × 12 attack-rendering families × 5
+malicious goals = 169 executable cases per model**. Paper Table 4 reports the
+per-model attack-success-rate matrix.
 
 ## 🧪 Supported Agent Harnesses
 
