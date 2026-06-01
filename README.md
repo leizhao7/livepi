@@ -86,8 +86,8 @@ python3 scripts/aggregate_results.py
 
 ## 📨 Contact
 
-- **Lei Zhao** — [lzhao7@wharton.upenn.edu](mailto:lzhao7@wharton.upenn.edu)
-- **Edgar Dobriban** — [ed@wharton.upenn.edu](mailto:ed@wharton.upenn.edu)
+- **Lei Zhao** — [leizhao7@wharton.upenn.edu](mailto:leizhao7@wharton.upenn.edu)
+- **Edgar Dobriban** — [dobriban@wharton.upenn.edu](mailto:dobriban@wharton.upenn.edu)
 
 ## 🎈 Citation
 
