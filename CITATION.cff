@@ -14,3 +14,16 @@ abstract: >-
   tool-using AI agents in production-like environments. It defines 169
   executable cases per evaluated model over seven input surfaces, twelve
   attack-technique or rendering families, and five malicious objectives.
+repository-code: "https://github.com/leizhao7/livepi"
+preferred-citation:
+  type: article
+  title: "LivePI: More Realistic Benchmarking of Agents Against Indirect Prompt Injection"
+  authors:
+    - family-names: Zhao
+      given-names: Lei
+    - family-names: Bhaskar
+      given-names: Abhay
+    - family-names: Dobriban
+      given-names: Edgar
+  year: 2026
+  url: "https://arxiv.org/abs/2605.17986"

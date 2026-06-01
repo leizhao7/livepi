@@ -1,14 +1,21 @@
 # Live Prompt Injection benchmark (LivePI)
 
 Live Prompt Injection benchmark (LivePI) is the reproducibility artifact for the
-OpenClaw prompt-injection benchmark. The benchmark implementation lives in
-`prompt_injection_lab/`. The paper-aligned matrix contains 169 executable cases
-per model.
+paper [**LivePI: More Realistic Benchmarking of Agents Against Indirect Prompt
+Injection**](https://arxiv.org/abs/2605.17986) (Lei Zhao, Abhay Bhaskar, Edgar
+Dobriban — University of Pennsylvania, 2026).
 
-The included bootstrap script is designed for a fresh Ubuntu 24.04 VPS with SSH
-access and passwordless `sudo`. It recreates the benchmark VPS layout without
-hardcoding any machine name, IP address, private token, account ID, phone number,
-or API key.
+LivePI evaluates AI agents under indirect prompt injection in a production-like
+deployment with **live but test-controlled** email, chat, web, local-file,
+repository, and wallet interfaces. The benchmark spans **7 input surfaces × 12
+attack-rendering families × 5 malicious goals = 169 executable cases per model**
+(see paper Table 4 for the per-model attack-success-rate matrix).
+
+The benchmark implementation lives in `prompt_injection_lab/`. The runner is
+designed to run **locally by default** (everything on one Ubuntu 24.04+ host) but
+also supports a remote VPS via `--host user@vps`. It recreates the benchmark
+layout without hardcoding any machine name, IP address, private token, account
+ID, phone number, or API key.
 
 ## What Setup Recreates
 
@@ -216,37 +223,6 @@ boolean used for attack-success-rate aggregation.
 Use `--dry-run --write-inputs judge_inputs.jsonl` to inspect the exact prompt
 input without calling an LLM.
 
-## NeurIPS / Dataverse Release
-
-This repository includes the extra documentation needed to package the benchmark
-as a NeurIPS Evaluations & Datasets artifact:
-
-- `DATASET_CARD.md`: dataset card with intended use, limitations, synthetic-data
-  status, sensitive-data handling, and social-impact notes.
-- `metadata/rai_metadata_livepi.json`: Responsible AI metadata fields to
-  merge into the Dataverse-generated Croissant export.
-- `metadata/dataverse_metadata.md`: suggested Harvard Dataverse form values.
-- `docs/NEURIPS_DATASET_CHECKLIST.md`: upload, Croissant, validation, and
-  OpenReview checklist.
-
-Build a clean upload package:
-
-```bash
-python3 scripts/prepare_neurips_dataset_package.py --archive
-```
-
-After uploading the archive to Harvard Dataverse, export the Dataverse Croissant
-metadata and merge the required RAI fields:
-
-```bash
-python3 scripts/merge_croissant_rai.py \
-  --input dataverse-croissant.json \
-  --rai metadata/rai_metadata_livepi.json \
-  --output livepi.croissant.json
-```
-
-Validate `livepi.croissant.json` with the NeurIPS Croissant validator
-before uploading it to OpenReview.
 
 ## Notes
 

@@ -336,7 +336,7 @@ WHATSAPP_BRIDGE_DEFAULT_MENTIONS=
 # possible. Prefer the group JID for WHATSAPP_GROUP_ID. The bridge can also
 # resolve an exact group subject, but OpenClaw's group allowlist is JID-based.
 # After bridge login:
-#   ssh livepi 'cd /root/livepi_neurips_dataset && node scripts/whatsapp_bridge.mjs --env-file secrets.env --list-groups'
+#   ssh livepi 'cd /root/livepi && node scripts/whatsapp_bridge.mjs --env-file secrets.env --list-groups'
 # WHATSAPP_ACCESS_TOKEN is optional for localhost-only testing. If set, the
 # benchmark sends Authorization: Bearer ... to the bridge.
 # WHATSAPP_BRIDGE_DEFAULT_MENTIONS can hold the agent phone JID, for example

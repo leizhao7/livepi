@@ -1698,7 +1698,7 @@ def _assert_model_coverage(status: dict[str, Any], strict: bool) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Provision a clean Ubuntu VPS for LivePI.")
-    parser.add_argument("--host", required=True, help="SSH host, for example ubuntu@203.0.113.10.")
+    parser.add_argument("--host", default="root@127.0.0.1", help="Target host (default: root@127.0.0.1 for local install). Set to user@vps for remote SSH deployment.")
     parser.add_argument("--identity", default="", help="Optional SSH private key.")
     parser.add_argument("--port", type=int, default=None, help="Optional SSH port.")
     parser.add_argument("--ssh-option", action="append", default=[], help="Repeatable ssh -o option.")
