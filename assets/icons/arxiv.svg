@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 170" role="img" aria-labelledby="title">
+  <title id="title">arXiv</title>
+  <rect width="420" height="170" fill="none"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M154 18 255 151" stroke="#8b857b" stroke-width="24"/>
+    <path d="M162 151 247 28" stroke="#b51234" stroke-width="24"/>
+  </g>
+  <g fill="#8b857b" font-family="'Courier New', monospace" font-weight="700" font-size="92">
+    <text x="2" y="121">ar</text>
+    <text x="276" y="121">iv</text>
+  </g>
+  <path d="M98 63h36c13 0 20 7 20 20v13" fill="none" stroke="#8b857b" stroke-width="16" stroke-linecap="round"/>
+</svg>

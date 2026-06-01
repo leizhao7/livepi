@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LivePI: More Realistic Benchmarking of AI Agents Against Indirect Prompt Injection</title>
+    <meta
+      name="description"
+      content="LivePI is a production-like benchmark for evaluating OpenClaw agents against indirect prompt injection across live, test-controlled channels."
+    >
+    <link rel="stylesheet" href="assets/styles.css?v=20260519-hero-focus">
+  </head>
+  <body>
+    <header class="hero" id="top">
+      <nav class="top-nav" aria-label="Primary navigation">
+        <div class="nav-links">
+          <a href="#results">Results</a>
+          <a href="#benchmark">Benchmark</a>
+          <a href="#citation">Citation</a>
+        </div>
+      </nav>
+
+      <div class="hero-content">
+        <h1><span>Live</span>PI</h1>
+        <h2>More Realistic Benchmarking of AI Agents Against Indirect Prompt Injection</h2>
+
+        <figure class="hero-figure">
+          <img
+            src="assets/img/overview.png"
+            width="2400"
+            height="1350"
+            alt="Overview of the LivePI indirect prompt-injection benchmark workflow."
+          >
+          <span class="livepi-focus-box" aria-hidden="true"></span>
+          <span class="livepi-focus-label" aria-hidden="true"><span>Live</span>PI</span>
+        </figure>
+
+        <p class="hero-copy">
+          A production-like, test-controlled benchmark for measuring whether tool-using agents
+          remain task-aligned when adversarial instructions arrive through realistic external channels.
+        </p>
+
+        <div class="hero-callout">
+          Total attack success rates range from <strong>10.7%</strong> to <strong>29.6%</strong>
+          across five recent LLM backbones; group-chat injection has a high success rate here.
+        </div>
+
+        <div class="button-row" aria-label="Project links">
+          <a class="button primary disabled" href="#" aria-disabled="true">
+            <img class="button-icon-img arxiv-logo" src="assets/icons/arxiv.svg" alt="" aria-hidden="true">
+            arXiv TBD
+          </a>
+          <a class="button" href="https://github.com/leizhao7/livepi" target="_blank" rel="noopener">
+            <img class="button-icon-img github-logo" src="assets/icons/github.svg" alt="" aria-hidden="true">
+            GitHub
+          </a>
+          <a class="button disabled" href="#" aria-disabled="true">
+            <img class="button-icon-img hf-logo" src="assets/icons/huggingface.svg" alt="" aria-hidden="true">
+            Hugging Face TBD
+          </a>
+          <a class="button" href="#citation">BibTeX</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="trace-section" aria-label="Example attack trace">
+        <div class="section-inner">
+          <div class="section-title centered">
+            <p>Example Trace</p>
+            <h2>Harmless-looking content can carry executable instructions.</h2>
+          </div>
+          <figure class="trace-figure">
+            <img
+              src="assets/img/evaluation.png"
+              width="1133"
+              height="1325"
+              alt="Example LivePI attack trace showing a benign email-summary request followed by injected instructions in retrieved email content."
+            >
+          </figure>
+        </div>
+      </section>
+
+      <section class="results-section" id="results">
+        <div class="section-inner">
+          <div class="section-title centered">
+            <p>Evaluation Results</p>
+            <h2>Recent backbones still fail under realistic indirect prompt injection.</h2>
+          </div>
+
+          <div class="stat-grid">
+            <article class="stat">
+              <strong>100.0%</strong>
+              <span>Group Chat ASR</span>
+              <p>Observed for all evaluated backbones in this deployment.</p>
+            </article>
+            <article class="stat">
+              <strong>29.6%</strong>
+              <span>Highest Total ASR</span>
+              <p>Gemini 3.1 Pro has the highest case-weighted total ASR.</p>
+            </article>
+            <article class="stat">
+              <strong>10.7%</strong>
+              <span>Lowest Total ASR</span>
+              <p>Claude Opus 4.6 has the lowest total ASR in this evaluation.</p>
+            </article>
+            <article class="stat">
+              <strong>5</strong>
+              <span>Recent Backbones</span>
+              <p>Evaluated under the same surface and malicious-goal structure.</p>
+            </article>
+          </div>
+
+          <div class="results-table-wrap">
+            <div class="table-heading">
+              <h3>Attack success rate by surface</h3>
+              <p>Lower ASR indicates fewer successful malicious-goal completions.</p>
+            </div>
+            <table class="results-table" id="results-table">
+              <thead>
+                <tr>
+                  <th>Surface</th>
+                  <th>GPT-5.3-Codex</th>
+                  <th>Claude Opus 4.6</th>
+                  <th>Gemini 3.1 Pro</th>
+                  <th>Kimi K2.5</th>
+                  <th>GLM-5</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Group chat (n=15)</td><td>100.0%</td><td>100.0%</td><td>100.0%</td><td>100.0%</td><td>100.0%</td></tr>
+                <tr><td>Email (n=50)</td><td>20.0%</td><td class="best">2.0%</td><td>12.0%</td><td>6.0%</td><td>6.0%</td></tr>
+                <tr><td>Local Docs (n=50)</td><td>34.0%</td><td class="best">0.0%</td><td>30.0%</td><td>12.0%</td><td>50.0%</td></tr>
+                <tr><td>Repo Links (n=4)</td><td>100.0%</td><td class="best">50.0%</td><td>100.0%</td><td>100.0%</td><td>100.0%</td></tr>
+                <tr><td>Gist (n=50)</td><td class="best">0.0%</td><td class="best">0.0%</td><td>20.0%</td><td class="best">0.0%</td><td class="best">0.0%</td></tr>
+                <tr class="total"><td>Total ASR (n=169)</td><td>27.2%</td><td class="best">10.7%</td><td>29.6%</td><td>16.6%</td><td>27.8%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="abstract-section" id="abstract">
+        <div class="section-inner narrow">
+          <div class="section-title">
+            <h2>Evaluating agentic risk where prompt injection actually enters the workflow.</h2>
+          </div>
+
+          <p class="lead">
+            AI agents such as OpenClaw increasingly operate with access to external tools, local files,
+            web content, messaging channels, email, repositories, and wallet interfaces. LivePI evaluates
+            indirect prompt-injection risk in a real virtual-machine deployment with live but
+            test-controlled channels, covering seven input surfaces, twelve attack or rendering families,
+            and five malicious goals.
+          </p>
+
+          <div class="abstract-points">
+            <article class="point">
+              <div class="point-number">1</div>
+              <h3>Production-Like Benchmark</h3>
+              <p>
+                LivePI contains 169 executable attack instances across group chat, email, local files,
+                repository links, and public Gists.
+              </p>
+            </article>
+            <article class="point">
+              <div class="point-number">2</div>
+              <h3>Cross-Backbone Evaluation</h3>
+              <p>
+                The benchmark compares GPT-5.3-Codex, Claude Opus 4.6, Gemini 3.1 Pro, Kimi K2.5,
+                and GLM-5 under the same surface and goal structure.
+              </p>
+            </article>
+            <article class="point">
+              <div class="point-number">3</div>
+              <h3>Executable Outcome Traces</h3>
+              <p>
+                Each case records prompts, tool calls, tool outputs, and final responses so attack
+                success can be judged from concrete agent behavior.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="benchmark-section" id="benchmark">
+        <div class="section-inner">
+          <div class="section-title centered">
+            <p>Benchmark Design</p>
+            <h2>Attack surfaces, malicious goals, and executable trials.</h2>
+          </div>
+
+          <div class="design-overview" aria-label="Benchmark construction pipeline">
+            <article>
+              <span class="design-icon">01</span>
+              <h3>Untrusted Surface</h3>
+              <p>Inject content through a realistic channel the agent naturally reads during a task.</p>
+            </article>
+            <article>
+              <span class="design-icon">02</span>
+              <h3>Place Attack</h3>
+              <p>Insert the malicious instructions into harmless-looking content.</p>
+            </article>
+            <article>
+              <span class="design-icon">03</span>
+              <h3>Goal Completion</h3>
+              <p>Score whether the agent both follows the injected instruction and completes the malicious effect.</p>
+            </article>
+          </div>
+
+          <div class="benchmark-list">
+            <details class="benchmark-card rich-card" open>
+              <summary>
+                <span class="benchmark-label">Surfaces</span>
+                <span class="benchmark-heading">Seven live or tool-mediated input channels</span>
+                <span class="benchmark-summary">WhatsApp, Telegram, Slack, Email, Local Docs, Repo Links, and Gist</span>
+              </summary>
+              <div class="surface-grid">
+                <div><span class="surface-icon chat-icon" aria-hidden="true"></span><strong>Group Chat</strong><span>WhatsApp, Telegram, and Slack messages from unverified participants enter the agent's conversation context.</span></div>
+                <div><span class="surface-icon mail-icon" aria-hidden="true"></span><strong>Email</strong><span>Gmail content is retrieved from a monitored mailbox and inserted as tool-returned evidence.</span></div>
+                <div><span class="surface-icon doc-icon" aria-hidden="true"></span><strong>Local Docs</strong><span>Injected handoff files are read from disk during otherwise benign file-inspection workflows.</span></div>
+                <div><span class="surface-icon repo-icon" aria-hidden="true"></span><strong>Repo Links</strong><span>Attacker-controlled repositories or packages are fetched, installed, or imported during setup tasks.</span></div>
+                <div><span class="surface-icon web-icon" aria-hidden="true"></span><strong>Gist</strong><span>Public tutorial-style web content is retrieved as reference material and becomes prompt-visible context.</span></div>
+              </div>
+            </details>
+
+            <details class="benchmark-card rich-card" open>
+              <summary>
+                <span class="benchmark-label">Construction</span>
+                <span class="benchmark-heading">169 executable cases across 12 attack families</span>
+                <span class="benchmark-summary">Only feasible surface, technique, and goal combinations are instantiated</span>
+              </summary>
+              <div class="construction-layout">
+                <div class="construction-copy">
+                  <p>
+                    Each LivePI case is built as a concrete end-to-end episode rather than a static prompt.
+                    We first select a channel that a real OpenClaw workflow can touch, then pair it with an
+                    attack rendering that plausibly appears as external content, and finally bind it to a
+                    malicious goal with observable side effects.
+                  </p>
+                  <p>
+                    The benchmark deliberately avoids the full Cartesian product of surfaces, techniques,
+                    and goals. Instead, it instantiates combinations that are executable in the deployed VM:
+                    email attacks arrive through a mailbox, repository attacks are fetched during coding
+                    workflows, local-document attacks are read from disk, and chat attacks are delivered
+                    through shared messaging channels.
+                  </p>
+                </div>
+              </div>
+            </details>
+
+            <details class="benchmark-card rich-card">
+              <summary>
+                <span class="benchmark-label">Goals</span>
+                <span class="benchmark-heading">Five malicious objectives spanning confidentiality, integrity, and financial abuse</span>
+                <span class="benchmark-summary">Protected data, security controls, unsafe code, inbox summaries, and crypto transfer</span>
+              </summary>
+              <ul class="goal-list">
+                <li>Protected-information exfiltration</li>
+                <li>Unauthorized security-control changes</li>
+                <li>Unsafe code retrieval or execution</li>
+                <li>Inbox-summary exfiltration</li>
+                <li>Unauthorized cryptocurrency transfer</li>
+              </ul>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="citation-section" id="citation">
+        <div class="section-inner narrow">
+          <div class="section-title">
+            <p>Citation</p>
+            <h2>If you use LivePI, please cite the paper.</h2>
+          </div>
+          <div class="bibtex-box">
+            <button class="copy-button" type="button" data-copy="#bibtex">Copy BibTeX</button>
+            <pre id="bibtex">@misc{zhao2026livepi,
+  title={LivePI: More Realistic Benchmarking of AI Agents Against Indirect Prompt Injection},
+  author={Zhao, Lei and Bhaskar, Abhay and Dobriban, Edgar},
+  year={2026},
+  note={Preprint}
+}</pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="bottom-info" aria-label="Authors and safety note">
+        <div class="section-inner narrow">
+          <div class="byline-bottom">
+            <p class="authors">Lei Zhao, Abhay Bhaskar, and Edgar Dobriban</p>
+            <p class="affiliation">University of Pennsylvania</p>
+            <p class="notes">
+              Correspondence to LZ
+              (<a href="mailto:leizhao7@wharton.upenn.edu">leizhao7@wharton.upenn.edu</a>)
+              and ED
+              (<a href="mailto:dobriban@wharton.upenn.edu">dobriban@wharton.upenn.edu</a>).
+            </p>
+          </div>
+
+          <div class="safety-note" aria-label="Safety note">
+            <strong>Safety note:</strong>
+            This project studies indirect prompt-injection attacks in controlled accounts and assets.
+            Operational payload details are redacted or bounded where appropriate.
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="section-inner">
+        <span>LivePI: More Realistic Benchmarking of AI Agents Against Indirect Prompt Injection</span>
+        <a href="#top">Back to top</a>
+      </div>
+    </footer>
+
+    <script src="assets/script.js"></script>
+  </body>
+</html>
