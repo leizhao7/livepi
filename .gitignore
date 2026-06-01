@@ -1,0 +1,40 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+
+.env
+.env.*
+!.env.example
+secrets.env
+*.secrets.env
+*.session
+*.session-journal
+.gateway_device_identity.json
+
+prompt_injection_lab/results/
+prompt_injection_lab/results_*/
+prompt_injection_lab/generated/
+prompt_injection_lab/results/_docker_runner_logs/
+prompt_injection_lab/.gateway_device_identity.json
+.livepi_agent_runtime/
+.livepi-agent-home/
+.docker-build/
+
+dist/
+*.tar.gz
+*.zip
+
+# Whatsapp bridge runtime / node_modules
+.livepi_whatsapp_bridge_deps/
+.whatsapp_attacker_auth/
+
+# Editor / backup files
+*.bak.*
+*.swp
+*.tmp
+.idea/
+.vscode/
+
+# Macos metadata
+._*
+.AppleDouble

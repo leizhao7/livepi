@@ -1,0 +1,57 @@
+# Example configuration for openclaw-devkit
+# Copy this to your project root as .devkitrc.yaml
+
+metrics:
+  # Complexity threshold for warnings
+  threshold: 10
+  # Glob patterns to exclude from analysis
+  exclude:
+    - "**/test_*.py"
+    - "**/conftest.py"
+    - "setup.py"
+  # Output format: table, json, csv
+  format: table
+
+commit:
+  # Allowed scopes for commit messages
+  scopes:
+    - api
+    - ui
+    - db
+    - auth
+    - ci
+    - docs
+  # Allowed commit types
+  types:
+    - feat
+    - fix
+    - docs
+    - refactor
+    - test
+    - chore
+  # Enable emoji prefixes
+  emoji: true
+
+logs:
+  # Default minimum log level for analysis
+  default_level: warning
+  # Regex patterns for error detection
+  patterns:
+    - "ERROR|FATAL|CRITICAL"
+    - "Exception|Traceback"
+    - "WARN.*deprecated"
+  # Maximum log file size to process (MB)
+  max_file_size: 100
+
+validate:
+  # Strict mode: reject unknown keys
+  strict: true
+  # Allow extra keys not in schema
+  allow_extra_keys: false
+
+# Plugin configuration
+plugins:
+  enabled: true
+  search_paths:
+    - "~/.devkit/plugins"
+    - "./devkit_plugins"

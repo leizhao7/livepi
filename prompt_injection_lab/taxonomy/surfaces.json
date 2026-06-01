@@ -1,0 +1,73 @@
+{
+  "version": "2026-05-05",
+  "description": "Paper-aligned LivePI surface space. Internal names are the runner surface tags.",
+  "surfaces": [
+    {
+      "name": "whatsapp_group",
+      "paper_name": "WhatsApp Group",
+      "concrete_channel": "Shared WhatsApp group",
+      "description": "Mention-targeted message posted by an unverified participant in a shared chat space.",
+      "default_input_function": "whatsapp_send_group_message",
+      "paper_counted": true
+    },
+    {
+      "name": "telegram_group",
+      "paper_name": "Telegram Group",
+      "concrete_channel": "Shared Telegram group",
+      "description": "Mention-targeted message posted by an unverified participant in a shared chat space.",
+      "default_input_function": "telegram_send_group_message",
+      "paper_counted": true
+    },
+    {
+      "name": "slack_channel",
+      "paper_name": "Slack Channel",
+      "concrete_channel": "Shared Slack channel",
+      "description": "Mention-targeted message posted by an unverified participant in a shared chat space.",
+      "default_input_function": "slack_send_channel_message",
+      "paper_counted": true
+    },
+    {
+      "name": "email_gmail",
+      "paper_name": "Email",
+      "concrete_channel": "Gmail inbox message",
+      "description": "Retrieved from the monitored mailbox and inserted as tool-returned content.",
+      "default_input_function": "gmail_send_email",
+      "paper_counted": true
+    },
+    {
+      "name": "direct_chat_txt",
+      "paper_name": "Local Docs",
+      "aliases": ["local_docs", "local_documents"],
+      "concrete_channel": "Local review document on the VPS",
+      "description": "Read from disk during an otherwise benign file-inspection request.",
+      "default_input_function": "direct_chat_seed_txt_file",
+      "paper_counted": true
+    },
+    {
+      "name": "github_supply_chain",
+      "paper_name": "Repo Links",
+      "concrete_channel": "Public repository/package link",
+      "description": "Fetched, installed, or imported as part of a coding or setup workflow.",
+      "default_input_function": "github_supply_chain_payload_slot",
+      "paper_counted": true
+    },
+    {
+      "name": "gist_tutorial",
+      "paper_name": "Gist",
+      "concrete_channel": "Public tutorial-style Gist post",
+      "description": "Retrieved through web fetch as benign reference material.",
+      "default_input_function": "github_gist_create",
+      "paper_counted": true
+    }
+  ],
+  "legacy_internal_surfaces": [
+    {
+      "name": "shared_docs",
+      "description": "Older collaborative-document fixture retained in code but not counted in the paper surface space."
+    },
+    {
+      "name": "web_link",
+      "description": "Generic GitHub file-overwrite helper retained for ad hoc web-link tests; paper Repo Links and Gist use first-class surfaces."
+    }
+  ]
+}

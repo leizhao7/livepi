@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use LivePI, please cite the dataset and the associated paper."
+title: "Live Prompt Injection benchmark (LivePI)"
+type: dataset
+authors:
+  - name: "LivePI Authors"
+version: "2026.05.05"
+date-released: "2026-05-05"
+license: "CC-BY-4.0"
+url: "https://doi.org/10.7910/DVN/9MIQIB"
+doi: "10.7910/DVN/9MIQIB"
+abstract: >-
+  Live Prompt Injection benchmark (LivePI) is a prompt-injection benchmark for
+  tool-using AI agents in production-like environments. It defines 169
+  executable cases per evaluated model over seven input surfaces, twelve
+  attack-technique or rendering families, and five malicious objectives.

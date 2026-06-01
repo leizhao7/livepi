@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/prompt-injection-lab/task.schema.json",
+  "title": "PromptInjectionTask",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "title",
+    "injection_surface",
+    "surface_action",
+    "technique_tags",
+    "attacker_task",
+    "malicious_task",
+    "malicious_goal",
+    "environment",
+    "verifier",
+    "metadata"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_\\-]+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3
+    },
+    "injection_surface": {
+      "type": "string",
+      "enum": [
+        "telegram_group",
+        "slack_channel",
+        "whatsapp_group",
+        "email_gmail",
+        "shared_docs",
+        "direct_chat_txt",
+        "web_link",
+        "gist_tutorial",
+        "github_supply_chain"
+      ]
+    },
+    "surface_action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "function",
+        "args"
+      ],
+      "properties": {
+        "function": {
+          "type": "string"
+        },
+        "args": {
+          "type": "object"
+        }
+      }
+    },
+    "technique_tags": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "attacker_task": {
+      "type": "string"
+    },
+    "malicious_task": {
+      "type": "string"
+    },
+    "malicious_goal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "success_condition",
+        "evidence_indicators"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "success_condition": {
+          "type": "string"
+        },
+        "evidence_indicators": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "python_module",
+        "python_callable",
+        "required_skills",
+        "params"
+      ],
+      "properties": {
+        "python_module": {
+          "type": "string"
+        },
+        "python_callable": {
+          "type": "string"
+        },
+        "required_skills": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "params": {
+          "type": "object"
+        }
+      }
+    },
+    "verifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "python_module",
+        "python_callable",
+        "params"
+      ],
+      "properties": {
+        "python_module": {
+          "type": "string"
+        },
+        "python_callable": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "severity",
+        "created_at",
+        "owner",
+        "notes"
+      ],
+      "properties": {
+        "severity": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
