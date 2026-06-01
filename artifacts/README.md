@@ -1,4 +1,4 @@
-# livepi-artifacts
+# livepi
 
 Curated indirect-prompt-injection benchmark artifacts for the LivePI paper
 ([arXiv:2605.17986](https://arxiv.org/abs/2605.17986)). Mirrors the
@@ -19,7 +19,7 @@ pip install "git+https://github.com/leizhao7/livepi.git#subdirectory=artifacts"
 ## Use
 
 ```python
-import livepi_artifacts as lpa
+import livepi as lpa
 
 # list everything
 for entry in lpa.list_artifacts():

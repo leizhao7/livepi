@@ -4,7 +4,7 @@
 Usage:
     python3 artifacts/scripts/build_artifacts.py \
         --results-root prompt_injection_lab/results \
-        --out artifacts/livepi_artifacts/data
+        --out artifacts/livepi/data
 """
 from __future__ import annotations
 import argparse, glob, json, os, re

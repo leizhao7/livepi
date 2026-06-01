@@ -1,7 +1,7 @@
-"""livepi-artifacts — curated benchmark results for the LivePI paper.
+"""livepi — curated benchmark results for the LivePI paper.
 
 Usage:
-    import livepi_artifacts as lpa
+    import livepi as lpa
     art = lpa.read_artifact(agent="openclaw", model="anthropic/claude-opus-4.6")
     print(art["parameters"]["hard_attack_success_rate"])
     for case in art["cases"]:
@@ -31,7 +31,7 @@ def _slug(s: str) -> str:
 
 
 def _data_root():
-    return files("livepi_artifacts") / "data"
+    return files("livepi") / "data"
 
 
 def list_artifacts() -> list[dict[str, str]]:

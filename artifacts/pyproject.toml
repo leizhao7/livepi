@@ -3,9 +3,9 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "livepi-artifacts"
+name = "livepi"
 version = "0.1.0"
-description = "Curated indirect-prompt-injection benchmark artifacts for the LivePI paper (arXiv:2605.17986)."
+description = "LivePI — curated indirect-prompt-injection benchmark artifacts (arXiv:2605.17986)."
 authors = [
   {name = "Lei Zhao", email = "leizhao7@wharton.upenn.edu"},
   {name = "Abhay Bhaskar"},
@@ -29,7 +29,7 @@ classifiers = [
 include-package-data = true
 
 [tool.setuptools.packages.find]
-include = ["livepi_artifacts*"]
+include = ["livepi*"]
 
 [tool.setuptools.package-data]
-livepi_artifacts = ["data/**/*.json"]
+livepi = ["data/**/*.json"]

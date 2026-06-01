@@ -38,3 +38,4 @@ dist/
 # Macos metadata
 ._*
 .AppleDouble
+*.egg-info/
