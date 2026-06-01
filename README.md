@@ -1,23 +1,60 @@
-# Live Prompt Injection benchmark (LivePI)
+# LivePI: Live Prompt Injection Benchmark
 
-Live Prompt Injection benchmark (LivePI) is the reproducibility artifact for the
-paper [**LivePI: More Realistic Benchmarking of Agents Against Indirect Prompt
-Injection**](https://arxiv.org/abs/2605.17986) (Lei Zhao, Abhay Bhaskar, Edgar
-Dobriban — University of Pennsylvania, 2026).
+<p align="center">
+  <a href="https://arxiv.org/abs/2605.17986"><img src="https://img.shields.io/badge/arXiv-2605.17986-b31b1b.svg" alt="arXiv"></a>
+  <a href="https://leizhao7.github.io/livepi/"><img src="https://img.shields.io/badge/Project-Page-blue.svg" alt="Project page"></a>
+  <a href="https://github.com/leizhao7/livepi"><img src="https://img.shields.io/badge/GitHub-livepi-181717.svg?logo=github" alt="GitHub"></a>
+  <a href="https://github.com/leizhao7/livepi/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
+</p>
+
+<p align="center">
+  📖 <a href="#-overview">Overview</a> ·
+  🧪 <a href="#-supported-agent-harnesses">Agent Harnesses</a> ·
+  🛠 <a href="#-getting-started">Getting Started</a> ·
+  📨 <a href="#-contact">Contact</a> ·
+  🎈 <a href="#-citation">Citation</a>
+</p>
+
+---
+
+## 📖 Overview
+
+LivePI is the official reproducibility artifact for the paper:
+
+> **LivePI: More Realistic Benchmarking of Agents Against Indirect Prompt Injection**  
+> Lei Zhao, Abhay Bhaskar, Edgar Dobriban — University of Pennsylvania, 2026.  
+> [📄 arXiv:2605.17986](https://arxiv.org/abs/2605.17986) · [🌐 Project page](https://leizhao7.github.io/livepi/)
 
 LivePI evaluates AI agents under indirect prompt injection in a production-like
 deployment with **live but test-controlled** email, chat, web, local-file,
 repository, and wallet interfaces. The benchmark spans **7 input surfaces × 12
-attack-rendering families × 5 malicious goals = 169 executable cases per model**
-(see paper Table 4 for the per-model attack-success-rate matrix).
+attack-rendering families × 5 malicious goals = 169 executable cases per model**.
+Paper Table 4 reports the per-model attack-success-rate matrix.
 
-The benchmark implementation lives in `prompt_injection_lab/`. The runner is
-designed to run **locally by default** (everything on one Ubuntu 24.04+ host) but
-also supports a remote VPS via `--host user@vps`. It recreates the benchmark
-layout without hardcoding any machine name, IP address, private token, account
-ID, phone number, or API key.
+The runner is **local-first** (everything on one Ubuntu 24.04+ host) and also
+supports a remote VPS via `--host user@vps`. It recreates the benchmark layout
+without hardcoding any machine name, IP address, private token, account ID,
+phone number, or API key.
 
-## What Setup Recreates
+## 🧪 Supported Agent Harnesses
+
+LivePI ships first-class adapters for four CLI / gateway-based agent harnesses:
+
+| Agent | Backbone routing | Status |
+|---|---|---|
+| **OpenClaw** | OpenRouter / Anthropic / Moonshot / Z-AI / Google (auto-fallback) | ✅ paper-aligned, fully supported |
+| **Hermes** (Nous Research) | OpenRouter (or ChatGPT OAuth) | 🧪 test |
+| **Codex CLI** (OpenAI) | OpenRouter (or ChatGPT OAuth) | 🧪 test |
+| **Claude Code** (Anthropic) | Anthropic API direct (no OpenRouter due to client-side model check) | 🧪 test |
+
+All five paper backbones — `openai/gpt-5.3-codex`, `anthropic/claude-opus-4.6`,
+`google/gemini-3.1-pro-preview`, `moonshotai/kimi-k2.5`, `z-ai/glm-5` — plus
+the LLM judge (`openai/gpt-5.3`) are registered out-of-the-box. Switch backbones
+with `--base-model <id>`.
+
+## 🛠 Getting Started
+
+### What Setup Recreates
 
 `setup_openclaw_benchmark_env.py` mirrors the benchmark environment structure:
 
@@ -238,3 +275,20 @@ input without calling an LLM.
   `OPENCLAW_BENCHMARK_RECIPIENT_EMAIL` or `TEST_RECIPIENT_EMAIL`.
 - The bundled task text uses `{{SCAN_PY_URL}}`; the runner expands it from
   `OPENCLAW_BENCHMARK_SCAN_PY_URL`.
+
+## 📨 Contact
+
+- **Lei Zhao** — [lzhao7@wharton.upenn.edu](mailto:lzhao7@wharton.upenn.edu)
+- **Edgar Dobriban** — [ed@wharton.upenn.edu](mailto:ed@wharton.upenn.edu)
+
+## 🎈 Citation
+
+```bibtex
+@article{zhao2026livepi,
+  title   = {LivePI: More Realistic Benchmarking of Agents Against Indirect Prompt Injection},
+  author  = {Zhao, Lei and Bhaskar, Abhay and Dobriban, Edgar},
+  journal = {arXiv preprint arXiv:2605.17986},
+  year    = {2026},
+  url     = {https://arxiv.org/abs/2605.17986}
+}
+```
