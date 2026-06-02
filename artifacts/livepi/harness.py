@@ -20,11 +20,17 @@ from typing import Any, Iterable
 
 from . import paths
 
-__all__ = ["run_case", "run_sweep", "aggregate", "bootstrap", "build_image", "ensure_workspace"]
+__all__ = [
+    "run_case",
+    "run_sweep",
+    "aggregate",
+    "bootstrap",
+    "build_image",
+    "ensure_workspace",
+]
 
 
 def _env_for_subprocess(workdir: Path) -> dict[str, str]:
-    """Make vendored prompt_injection_lab importable from the workspace."""
     env = os.environ.copy()
     py_paths = [str(paths.PACKAGE_ROOT.parent)]
     existing = env.get("PYTHONPATH")
@@ -46,13 +52,11 @@ def ensure_workspace(
     *,
     copy_lab: bool = True,
 ) -> Path:
-    """Prepare the user's workspace: drop secrets.example.env + a real
-    prompt_injection_lab/ folder so the Docker harness has somewhere to mount.
+    """Drop a writable prompt_injection_lab/ tree + secrets.example.env into
+    the workspace so the Docker harness has somewhere to mount and write to.
 
     The container always mounts CWD at /workspace and runs
-    `python3 prompt_injection_lab/scripts/run_surface_test.py`, so the workspace
-    must have a real (writable) `prompt_injection_lab/` subdir — not a symlink
-    into site-packages, otherwise .env/results writes would pollute the install.
+    `python3 prompt_injection_lab/scripts/run_surface_test.py`.
     """
     wd = _ensure_workdir(workdir)
 
@@ -73,6 +77,30 @@ def ensure_workspace(
     return wd
 
 
+def _bootstrap_path_defaults(wd: Path) -> list[str]:
+    """Path flags the vendored setup script needs because its REPO_ROOT
+    default resolves to the package install dir, not the user's workspace."""
+    args: list[str] = []
+    secrets = wd / "secrets.env"
+    if secrets.is_file():
+        args += ["--secrets-file", str(secrets)]
+    args += ["--env-file", str(wd / "prompt_injection_lab" / ".env")]
+    skill_src = wd / "prompt_injection_lab" / "fixtures" / "skills"
+    if not skill_src.is_dir():
+        # Fall back to the vendored package copy if workspace lab isn't fully
+        # initialised yet (e.g. user passed --no-copy-lab).
+        skill_src = paths.lab_root() / "fixtures" / "skills"
+    args += ["--skill-source", str(skill_src)]
+    args += [
+        "--gateway-identity-file",
+        str(wd / "prompt_injection_lab" / ".gateway_device_identity.json"),
+    ]
+    # Default to gateway port == openclaw default so local-only setups
+    # don't need a host-to-host tunnel translation.
+    args += ["--local-port", "18789"]
+    return args
+
+
 def bootstrap(
     workdir: str | os.PathLike[str] | None = None,
     *,
@@ -83,16 +111,37 @@ def bootstrap(
 ) -> int:
     """Run setup_openclaw_benchmark_env.py against the workspace.
 
-    Default = dry-run. Pass `apply=True` to mutate the workspace
-    (write prompt_injection_lab/.env, configure openclaw, etc.).
+    Default is a dry-run (no --apply). Use apply=True to mutate.
     """
     wd = ensure_workspace(workdir)
     cmd: list[str] = [sys.executable, str(paths.setup_script())]
+    extra = list(extra_args)
+    flat_extra = " ".join(extra)
+
+    # Only inject path defaults if the caller didn't pass them already.
+    path_defaults = _bootstrap_path_defaults(wd)
+    if secrets_file:
+        path_defaults += ["--secrets-file", str(Path(secrets_file).expanduser().resolve())]
+    for flag in ("--secrets-file", "--env-file", "--skill-source", "--gateway-identity-file", "--local-port"):
+        if flag in flat_extra:
+            # Strip our default for that flag.
+            i = 0
+            cleaned: list[str] = []
+            while i < len(path_defaults):
+                if path_defaults[i] == flag:
+                    i += 2
+                    continue
+                cleaned.append(path_defaults[i])
+                i += 1
+            path_defaults = cleaned
+    cmd += path_defaults
+
+    # Skip docker build inside bootstrap; use `livepi build-image` separately.
+    if "--skip-build-image" not in flat_extra:
+        cmd.append("--skip-build-image")
     if apply:
         cmd.append("--apply")
-    if secrets_file:
-        cmd += ["--secrets-file", str(Path(secrets_file).expanduser().resolve())]
-    cmd += list(extra_args)
+    cmd += extra
     proc = subprocess.run(cmd, cwd=str(wd), env=_env_for_subprocess(wd))
     if check and proc.returncode != 0:
         raise SystemExit(proc.returncode)
@@ -130,11 +179,9 @@ def run_case(
 ) -> dict[str, Any]:
     """Run one Dockerized case.
 
-    Args use the paper-friendly names; internally maps to the flags expected
-    by `prompt_injection_lab/scripts/run_surface_test.py`:
-        surface   -> --surface-tag
-        technique -> --technique-tag
-        objective -> --malicious-task-tag
+    surface -> --surface-tag
+    technique -> --technique-tag
+    objective -> --malicious-task-tag
     """
     wd = _ensure_workdir(workdir)
     env = _env_for_subprocess(wd)
@@ -201,12 +248,6 @@ def run_sweep(
     extra_args: Iterable[str] = (),
     check: bool = True,
 ) -> dict[str, Any]:
-    """Sweep the matrix. Exactly one of fixed_surface/fixed_objective fixes one
-    axis (varies the other 11/4); set neither to run the full 169-case grid.
-
-    Implementation uses `--all-techniques` per-(surface, objective) loop via
-    the underlying script.
-    """
     wd = _ensure_workdir(workdir)
     env = _env_for_subprocess(wd)
     if image:
@@ -237,7 +278,6 @@ def aggregate(
     extra_args: Iterable[str] = (),
     check: bool = True,
 ) -> str:
-    """Aggregate results — returns the script's stdout (markdown / json / csv)."""
     wd = _ensure_workdir(workdir)
     env = _env_for_subprocess(wd)
     results_path = wd / results_subdir
