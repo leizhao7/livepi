@@ -325,7 +325,14 @@ import subprocess
 
 
 def run(cmd: list[str]) -> tuple[int, str, str]:
-    proc = subprocess.run(cmd, capture_output=True, text=True)
+    if not cmd:
+        return 127, "", "missing command"
+    if shutil.which(cmd[0]) is None:
+        return 127, "", f"missing:{cmd[0]}"
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True)
+    except FileNotFoundError:
+        return 127, "", f"missing:{cmd[0]}"
     return proc.returncode, proc.stdout.strip(), proc.stderr.strip()
 
 
@@ -447,6 +454,8 @@ REMOTE_SYSTEM_STATE_RESTORER = r"""
 from __future__ import annotations
 
 import json
+import platform
+import shutil
 import subprocess
 
 
@@ -458,6 +467,23 @@ def run_shell(command: str) -> dict[str, object]:
         "stdout": (proc.stdout or "").strip(),
         "stderr": (proc.stderr or "").strip(),
     }
+
+
+if platform.system().lower() == "windows" or not any(
+    shutil.which(name) for name in ["apt-mark", "iptables", "ufw", "systemctl"]
+):
+    print(
+        json.dumps(
+            {
+                "skipped": True,
+                "reason": "linux_hardening_tools_unavailable",
+                "platform": platform.system(),
+                "commands": [],
+            },
+            ensure_ascii=True,
+        )
+    )
+    raise SystemExit(0)
 
 
 commands = [
@@ -2656,6 +2682,112 @@ class GatewayClient:
             # Ignore events/responses for other IDs while waiting.
         raise TimeoutError(f"timeout waiting for response to {method}")
 
+    @staticmethod
+    def _agent_rpc_session_id(session_key: str) -> str:
+        value = session_key.strip()
+        if not value:
+            return "main"
+        if value.startswith("agent:"):
+            parts = [part.strip() for part in value.split(":") if part.strip()]
+            if parts:
+                return parts[-1]
+        return value
+
+    def _send_agent_rpc_and_wait(
+        self,
+        *,
+        session_key: str,
+        message: str,
+        timeout_s: int = 240,
+    ) -> dict[str, Any]:
+        if self.ws is None:
+            raise RuntimeError("gateway not connected")
+        req_id = str(uuid.uuid4())
+        body = {
+            "type": "req",
+            "id": req_id,
+            "method": "agent",
+            "params": {
+                "sessionId": self._agent_rpc_session_id(session_key),
+                "message": message,
+                "idempotencyKey": str(uuid.uuid4()),
+            },
+        }
+        self.ws.send(json.dumps(body, ensure_ascii=True))
+
+        run_id = None
+        state = None
+        assistant_text = ""
+        final_payload: dict[str, Any] | None = None
+        agent_events: list[dict[str, Any]] = []
+        response_statuses: list[str] = []
+
+        deadline = time.time() + timeout_s
+        while time.time() < deadline:
+            try:
+                msg = self._recv_json(timeout=5)
+            except websocket.WebSocketTimeoutException:
+                continue
+            if msg.get("type") == "res" and msg.get("id") == req_id:
+                if not msg.get("ok"):
+                    raise RuntimeError(f"gateway request failed agent: {msg.get('error', {})}")
+                payload = msg.get("payload")
+                if not isinstance(payload, dict):
+                    continue
+                run_id = run_id or str(payload.get("runId", "")).strip() or None
+                status = str(payload.get("status", "")).strip()
+                if status:
+                    response_statuses.append(status)
+                if status in {"ok", "error", "timeout"} or payload.get("summary"):
+                    state = status or str(payload.get("summary", "")).strip() or "final"
+                    final_payload = payload
+                    result = payload.get("result")
+                    if isinstance(result, dict):
+                        payloads = result.get("payloads")
+                        if isinstance(payloads, list):
+                            texts = [
+                                str(item.get("text", "")).strip()
+                                for item in payloads
+                                if isinstance(item, dict) and str(item.get("text", "")).strip()
+                            ]
+                            assistant_text = "\n".join(texts)
+                    break
+            elif msg.get("type") == "event" and msg.get("event") == "agent":
+                payload = msg.get("payload")
+                if not isinstance(payload, dict):
+                    continue
+                if run_id and payload.get("runId") and payload.get("runId") != run_id:
+                    continue
+                agent_events.append(payload)
+
+        if final_payload is None:
+            raise TimeoutError("timeout waiting for final response to agent")
+
+        result_payload = final_payload.get("result")
+        result_meta = result_payload.get("meta", {}) if isinstance(result_payload, dict) else {}
+        tool_events = [
+            event
+            for event in agent_events
+            if event.get("stream") == "tool"
+            or (
+                isinstance(event.get("data"), dict)
+                and (event["data"].get("tool") or event["data"].get("toolName"))
+            )
+        ]
+        return {
+            "run_id": run_id,
+            "state": state,
+            "assistant_text": assistant_text,
+            "event_count": 0,
+            "events": [],
+            "agent_events": agent_events,
+            "agent_event_count": len(agent_events),
+            "tool_calls_observed": tool_events,
+            "gateway_method": "agent",
+            "agent_rpc_statuses": response_statuses,
+            "agent_result_meta": result_meta,
+        }
+
     def send_chat_and_wait(
         self,
         *,
@@ -2663,6 +2795,12 @@ class GatewayClient:
         message: str,
         timeout_s: int = 240,
     ) -> dict[str, Any]:
+        if _env_truthy("LIVEPI_OPENCLAW_USE_AGENT_RPC", "true"):
+            return self._send_agent_rpc_and_wait(
+                session_key=session_key,
+                message=message,
+                timeout_s=timeout_s,
+            )
         send_payload = {
             "sessionKey": session_key,
             "message": message,

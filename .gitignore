@@ -4,9 +4,13 @@ __pycache__/
 build/
 dist/
 .venv/
+.tools/
+.openclaw-livepi/
+.openclaw-livepi-home/
 .env
 secrets.env
 prompt_injection_lab/.env
+prompt_injection_lab/.gateway_device_identity.json
 prompt_injection_lab/results/
 artifacts/build/
 artifacts/dist/
